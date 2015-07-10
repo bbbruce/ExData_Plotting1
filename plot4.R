@@ -1,0 +1,22 @@
+epc <- read.delim("household_power_consumption.txt", sep=";", na.string="?", stringsAsFactors=FALSE)
+epc <- subset(epc, Date == "1/2/2007" | Date == "2/2/2007")
+epc$DateTime <- strptime(paste(epc$Date,epc$Time),format="%d/%m/%Y %H:%M:%S")
+
+png("plot4.png",height=480,width=480)
+par(mfrow=c(2,2))
+# first sub plot
+plot(epc$Global_active_power, type='l', ylab="Global Active Power (kilowatts)", xlab="", xaxt="n")
+axis(1,at=c(0,NROW(epc)/2,NROW(epc)),labels=c('Thu','Fri','Sat'))
+# second sub plot
+plot(epc$Voltage, type='l', ylab="Voltage", xlab="datetime", xaxt="n")
+axis(1,at=c(0,NROW(epc)/2,NROW(epc)),labels=c('Thu','Fri','Sat'))
+# third sub plot
+plot(epc$Sub_metering_1, type='l', ylab="Energy sub metering", xlab="", xaxt="n")
+lines(epc$Sub_metering_2, col="red")
+lines(epc$Sub_metering_3, col="blue")
+axis(1,at=c(0,NROW(epc)/2,NROW(epc)),labels=c('Thu','Fri','Sat'))
+legend("topright",legend=paste0("Sub_metering_",1:3),col=c("black","red","blue"),lty=1,bty="n")
+# fourth sub plot
+plot(epc$Global_reactive_power, type='l', ylab="Global_reactive_power", xlab="datetime", xaxt="n")
+axis(1,at=c(0,NROW(epc)/2,NROW(epc)),labels=c('Thu','Fri','Sat'))
+dev.off()
